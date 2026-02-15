@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minion Chase - Upgrade Shop</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f1724 0%, #07102a 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(0, 255, 255, 0.1);
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+
+    .coins-display {
+      font-size: 32px;
+      font-weight: bold;
+      color: #ffff00;
+      text-shadow: 0 0 10px #ffff00;
+    }
+
+    .back-btn {
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #FF9800 0%, #e68900 100%);
+      color: #fff;
+      border: 2px solid #ffaa00;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 152, 0, 0.5);
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: slideDown 0.6s ease-out;
+    }
+
+    .header h1 {
+      font-size: 52px;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff, 0 0 40px #0088ff;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .stats-summary {
+      background: linear-gradient(135deg, rgba(30, 50, 100, 0.9) 0%, rgba(10, 30, 70, 0.9) 100%);
+      border: 2px solid #00ff88;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 40px;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+      animation: slideUp 0.6s ease-out;
+    }
+
+    .stats-summary h2 {
+      font-size: 24px;
+      color: #00ff88;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 10px #00ff88;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .stat-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #00ff88;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-box:hover {
+      background: rgba(0, 255, 136, 0.1);
+      transform: scale(1.05);
+    }
+
+    .stat-box-label {
+      font-size: 12px;
+      color: #aabbcc;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-box-value {
+      font-size: 24px;
+      color: #00ff88;
+      font-weight: bold;
+    }
+
+    .upgrades-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .upgrade-card {
+      background: linear-gradient(135deg, rgba(20, 40, 80, 0.8) 0%, rgba(10, 20, 50, 0.8) 100%);
+      border: 2px solid #00ffff;
+      border-radius: 12px;
+      padding: 25px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upgrade-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .upgrade-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 40px rgba(0, 255, 255, 0.5);
+      border-color: #00ff88;
+    }
+
+    .upgrade-card:hover::before {
+      opacity: 1;
+    }
+
+    .upgrade-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .upgrade-icon {
+      font-size: 48px;
+      margin-right: 20px;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+    }
+
+    .upgrade-info h2 {
+      font-size: 24px;
+      color: #00ffff;
+      margin-bottom: 5px;
+    }
+
+    .upgrade-info p {
+      font-size: 14px;
+      color: #aabbcc;
+    }
+
+    .upgrade-stats {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .stat-label {
+      color: #aabbcc;
+      font-weight: bold;
+    }
+
+    .stat-value {
+      color: #ffff00;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .cost-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: rgba(255, 215, 0, 0.1);
+      border-radius: 8px;
+      border: 1px solid #ffd54a;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cost-text {
+      font-size: 14px;
+      color: #aabbcc;
+    }
+
+    .cost-amount {
+      font-size: 20px;
+      color: #ffff00;
+      font-weight: bold;
+    }
+
+    .buy-button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .buy-button:hover:not(:disabled) {
+      background: linear-gradient(135deg, #5cba60 0%, #55b159 100%);
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+    }
+
+    .buy-button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .buy-button:disabled {
+      background: linear-gradient(135deg, #888888 0%, #666666 100%);
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: 0 4px 15px rgba(136, 136, 136, 0.2);
+    }
+
+    .button-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .warning-text {
+      color: #ff6666;
+      font-size: 12px;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .bottom-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .action-btn {
+      padding: 16px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      border: 2px solid;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-back {
+      background: linear-gradient(135deg, #FF9800 0%, #e68900 100%);
+      color: #fff;
+      border-color: #ffaa00;
+    }
+
+    .btn-back:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 152, 0, 0.5);
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+      color: #fff;
+      border-color: #ff6666;
+    }
+
+    .btn-reset:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: #fff;
+      border-radius: 8px;
+      font-weight: bold;
+      animation: slideInRight 0.5s ease-out;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.5);
+      z-index: 1000;
+    }
+
+    .notification.error {
+      background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+      box-shadow: 0 4px 15px rgba(244, 67, 54, 0.5);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 36px;
+      }
+
+      .upgrades-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bottom-buttons {
+        flex-direction: column;
+      }
+
+      .action-btn {
+        width: 100%;
+      }
+
+      .top-bar {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="coins-display">💰 <span id="totalCoins">0</span></div>
+    <button class="back-btn" onclick="goBackToMenu()">← BACK TO MENU</button>
+  </div>
+
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1>⚙️ UPGRADE SHOP</h1>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+      <h2>📊 Current Stats</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-box-label">❤️ HP</div>
+          <div class="stat-box-value" id="statHP">3</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">💥 Damage</div>
+          <div class="stat-box-value" id="statDamage">1.0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">⚡ Crit Damage</div>
+          <div class="stat-box-value" id="statCritDmg">1.5x</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">🎯 Crit Rate</div>
+          <div class="stat-box-value" id="statCritRate">10%</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">🔥 Fire Rate</div>
+          <div class="stat-box-value" id="statFireRate">0.25s</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">🏃 Movement</div>
+          <div class="stat-box-value" id="statMovement">400</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upgrades Grid -->
+    <div class="upgrades-grid" id="upgradesContainer"></div>
+
+    <!-- Bottom Buttons -->
+    <div class="bottom-buttons">
+      <button class="action-btn btn-back" onclick="goBackToMenu()">← BACK TO MENU</button>
+      <button class="action-btn btn-reset" onclick="confirmResetAll()">🔄 RESET ALL UPGRADES</button>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification" style="display: none;"></div>
+
+  <script src="upgrade.js"></script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Features Expansion - Heavy Weapon Style</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f1724 0%, #07102a 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 40px;
+      color: #ff6b4a;
+      text-shadow: 0 0 20px #ff6b4a;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #aabbcc;
+      font-size: 16px;
+    }
+
+    .features-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, rgba(20, 40, 80, 0.9) 0%, rgba(10, 20, 50, 0.9) 100%);
+      border: 2px solid #ff6b4a;
+      border-radius: 15px;
+      padding: 25px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 30px rgba(255, 107, 74, 0.4);
+      border-color: #ffaa00;
+    }
+
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .feature-title {
+      font-size: 22px;
+      color: #ff6b4a;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255, 107, 74, 0.5);
+    }
+
+    .feature-description {
+      color: #aabbcc;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .feature-details {
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 3px solid #ffaa00;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 13px;
+      color: #ffd54a;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .status-ready {
+      background: rgba(76, 175, 80, 0.3);
+      border: 1px solid #4CAF50;
+      color: #00ff88;
+    }
+
+    .status-pending {
+      background: rgba(255, 152, 0, 0.3);
+      border: 1px solid #FF9800;
+      color: #ffaa00;
+    }
+
+    .status-soon {
+      background: rgba(244, 67, 54, 0.3);
+      border: 1px solid #f44336;
+      color: #ff6666;
+    }
+
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: #ff6b4a;
+      margin-bottom: 25px;
+      text-shadow: 0 0 15px rgba(255, 107, 74, 0.5);
+      border-bottom: 2px solid #ff6b4a;
+      padding-bottom: 15px;
+    }
+
+    .implementation-guide {
+      background: rgba(33, 150, 243, 0.1);
+      border-left: 4px solid #2196F3;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+    }
+
+    .implementation-guide h3 {
+      color: #00ffff;
+      margin-bottom: 15px;
+    }
+
+    .code-block {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #00ffff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      color: #00ff88;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border: 2px solid;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-enable {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: #fff;
+      border-color: #00ff88;
+    }
+
+    .btn-enable:hover {
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+      transform: translateY(-3px);
+    }
+
+    .btn-config {
+      background: linear-gradient(135deg, #2196F3 0%, #0b7dda 100%);
+      color: #fff;
+      border-color: #00ffff;
+    }
+
+    .btn-config:hover {
+      box-shadow: 0 6px 20px rgba(33, 150, 243, 0.6);
+      transform: translateY(-3px);
+    }
+
+    .configuration-panel {
+      background: rgba(0, 255, 255, 0.05);
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .configuration-panel.active {
+      display: block;
+    }
+
+    .config-input {
+      margin-bottom: 15px;
+    }
+
+    .config-input label {
+      display: block;
+      margin-bottom: 8px;
+      color: #00ffff;
+      font-weight: bold;
+    }
+
+    .config-input input,
+    .config-input select {
+      width: 100%;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #00ffff;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .config-input input:focus,
+    .config-input select:focus {
+      outline: none;
+      background: rgba(0, 255, 255, 0.1);
+      border-color: #00ff88;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+
+    .message.success {
+      background: rgba(76, 175, 80, 0.2);
+      border: 2px solid #4CAF50;
+      color: #00ff88;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .features-container {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 32px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>🎮 GAME FEATURES EXPANSION</h1>
+      <p>Heavy Weapon (2006) Style Features untuk Minion Chase</p>
+    </div>
+
+    <!-- Section 1: New Weapons & Power-ups -->
+    <div class="section">
+      <h2 class="section-title">🔫 Senjata & Power-up Baru</h2>
+      
+      <div class="features-container">
+        <!-- Scatter Gun -->
+        <div class="feature-card">
+          <div class="feature-icon">🔨</div>
+          <div class="feature-title">Scatter Gun</div>
+          <div class="feature-description">
+            Peluru menyebar ke 8 arah seperti Heavy Weapon. Damage lebih rendah tapi coverage lebih luas.
+          </div>
+          <div class="feature-details">
+            • 8 Peluru per tembakan<br>
+            • Spread angle: 45°<br>
+            • Fire rate: 0.3s<br>
+            • Perfect untuk crowd control
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Laser Beam -->
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Laser Beam</div>
+          <div class="feature-description">
+            Sinar laser yang terus menerus selama tombol ditahan. Damage per detik tinggi.
+          </div>
+          <div class="feature-details">
+            • Damage per frame: 0.5<br>
+            • Heat up time: 0.5s<br>
+            • Overheat time: 3s<br>
+            • Visual: Garis merah terang
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Grenade Launcher -->
+        <div class="feature-card">
+          <div class="feature-icon">💣</div>
+          <div class="feature-title">Grenade Launcher</div>
+          <div class="feature-description">
+            Peluru yang meledak dengan area damage. Cocok untuk boss fights.
+          </div>
+          <div class="feature-details">
+            • Damage radius: 100px<br>
+            • Explosion delay: 1.5s<br>
+            • Fire rate: 0.8s<br>
+            • AOE damage multiplier: 0.8x
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Homing Missile -->
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-title">Homing Missile</div>
+          <div class="feature-description">
+            Peluru yang mengikuti target terdekat otomatis. Accuracy tinggi.
+          </div>
+          <div class="feature-details">
+            • Auto tracking range: 300px<br>
+            • Turn speed: 120°/s<br>
+            • Damage: 2.5x<br>
+            • Fire rate: 0.6s
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Flame Thrower -->
+        <div class="feature-card">
+          <div class="feature-icon">🔥</div>
+          <div class="feature-title">Flame Thrower</div>
+          <div class="feature-description">
+            Semburan api yang meninggalkan daerah terbakar. Damage over time effect.
+          </div>
+          <div class="feature-details">
+            • Spread width: 80px<br>
+            • Range: 200px<br>
+            • Burn duration: 2s<br>
+            • DOT damage: 0.3/frame
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Shotgun -->
+        <div class="feature-card">
+          <div class="feature-icon">💢</div>
+          <div class="feature-title">Shotgun Mode</div>
+          <div class="feature-description">
+            Tembak banyak peluru dalam spread cone. Damage tinggi untuk jarak dekat.
+          </div>
+          <div class="feature-details">
+            • Pellets per shot: 6<br>
+            • Spread cone: 30°<br>
+            • Damage per pellet: 1.8<br>
+            • Fire rate: 0.5s
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+      </div>
+
+      <div class="implementation-guide">
+        <h3>📋 Cara Menambahkan Senjata Baru:</h3>
+        <div class="code-block">
+// Tambahkan di POWERUPS config (game.js)
+SCATTER_GUN: { 
+  name: 'Scatter Gun', 
+  color: '#ffaa00', 
+  duration: 8, 
+  icon: '🔨' 
+},
+
+// Lalu tambahkan logic di Player.update() section:
+if (player.scatterGunActive) {
+  // Spawn 8 bullets in circular pattern
+  for (let angle = 0; angle &lt; Math.PI * 2; angle += Math.PI / 4) {
+    let bx = player.x + Math.cos(angle) * 100;
+    let by = player.y + Math.sin(angle) * 100;
+    bullets.push(new Bullet(bx, by, damage, 'scatter'));
+  }
+}
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Enemy Types -->
+    <div class="section">
+      <h2 class="section-title">👾 Tipe Enemy Baru</h2>
+      
+      <div class="features-container">
+        <!-- Shield Enemy -->
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <div class="feature-title">Shield Enemy</div>
+          <div class="feature-description">
+            Enemy dengan shield yang harus dihancurkan dulu sebelum bisa damage.
+          </div>
+          <div class="feature-details">
+            • Shield health: 10<br>
+            • Body health: 5<br>
+            • Regenerate shield: Ya (2s)<br>
+            • Weak to explosive
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Flying Enemy -->
+        <div class="feature-card">
+          <div class="feature-icon">🦅</div>
+          <div class="feature-title">Flying Enemy</div>
+          <div class="feature-description">
+            Enemy yang terbang di udara, bergerak naik turun. Lebih sulit untuk ditembak.
+          </div>
+          <div class="feature-details">
+            • Movement pattern: Sine wave<br>
+            • Height range: 100-300px<br>
+            • Speed: 0.3x slower<br>
+            • Damage: 1.2x lebih tinggi
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Spawner Enemy -->
+        <div class="feature-card">
+          <div class="feature-icon">🌀</div>
+          <div class="feature-title">Spawner Enemy</div>
+          <div class="feature-description">
+            Enemy yang mengeluarkan minion kecil. Harus dihancurkan dengan cepat.
+          </div>
+          <div class="feature-details">
+            • Spawn rate: 1 minion/2s<br>
+            • Max minions: 3<br>
+            • Health: 15<br>
+            • Priority target: Medium
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Fast Enemy -->
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Fast Enemy</div>
+          <div class="feature-description">
+            Enemy yang bergerak cepat. Sulit dihindari, butuh reflexes bagus.
+          </div>
+          <div class="feature-details">
+            • Speed: 2x lebih cepat<br>
+            • Health: 2 (fragile)<br>
+            • Dodge pattern: Zig-zag<br>
+            • Damage: Normal
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Armored Enemy -->
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-title">Armored Enemy</div>
+          <div class="feature-description">
+            Enemy dengan armor tebal. Butuh damage tinggi untuk tembus armor.
+          </div>
+          <div class="feature-details">
+            • Armor rating: 0.5 (50% reduction)<br>
+            • Health: 20<br>
+            • Speed: 0.5x<br>
+            • Worth 2x coins
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Explosive Enemy -->
+        <div class="feature-card">
+          <div class="feature-icon">💥</div>
+          <div class="feature-title">Explosive Enemy</div>
+          <div class="feature-description">
+            Enemy yang meledak saat mati, damage lingkungan. Avoid at melee!
+          </div>
+          <div class="feature-details">
+            • Explosion radius: 150px<br>
+            • Explosion damage: 5<br>
+            • Warning time: 0.5s<br>
+            • Worth 3x coins
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Special Effects & Mechanics -->
+    <div class="section">
+      <h2 class="section-title">✨ Mekanik & Efek Spesial</h2>
+      
+      <div class="features-container">
+        <!-- Combo System -->
+        <div class="feature-card">
+          <div class="feature-icon">🔗</div>
+          <div class="feature-title">Combo System</div>
+          <div class="feature-description">
+            Semakin banyak kill tanpa pause, score multiplier meningkat.
+          </div>
+          <div class="feature-details">
+            • Combo timer: 3 detik reset<br>
+            • Max multiplier: 10x<br>
+            • Display: Floating text<br>
+            • Sound: Ascending beeps
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Blood/Gibs Effects -->
+        <div class="feature-card">
+          <div class="feature-icon">🩸</div>
+          <div class="feature-title">Gore & Gibs</div>
+          <div class="feature-description">
+            Partikel dan efek visual saat enemy mati untuk gore effect.
+          </div>
+          <div class="feature-details">
+            • Particle count: 20-40<br>
+            • Physics: Gravity + velocity<br>
+            • Colors: Red, dark red<br>
+            • Lifetime: 1-2 detik
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Screen Shake -->
+        <div class="feature-card">
+          <div class="feature-icon">📺</div>
+          <div class="feature-title">Screen Shake</div>
+          <div class="feature-description">
+            Kamera bergoyang saat explosion atau damage besar.
+          </div>
+          <div class="feature-details">
+            • Intensity scale: 1-10<br>
+            • Duration: 0.2-0.5s<br>
+            • Decay: Linear<br>
+            • Max range: 10px offset
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Slow Motion/Bullet Time -->
+        <div class="feature-card">
+          <div class="feature-icon">⏱️</div>
+          <div class="feature-title">Bullet Time</div>
+          <div class="feature-description">
+            Waktu melambat saat achievement khusus tercapai.
+          </div>
+          <div class="feature-details">
+            • Time scale: 0.5x<br>
+            • Duration: 1-2 detik<br>
+            • Trigger: Multi-kill<br>
+            • Visual: White flash
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Environmental Hazards -->
+        <div class="feature-card">
+          <div class="feature-icon">⚠️</div>
+          <div class="feature-title">Environmental Hazards</div>
+          <div class="feature-description">
+            Obstacle di map yang memberi damage atau slow. Strategic element.
+          </div>
+          <div class="feature-details">
+            • Types: Spike, laser, meteor<br>
+            • Damage: 2-5 per hit<br>
+            • Spawn rate: Random<br>
+            • Hint: Preview warning
+          </div>
+          <span class="status-badge status-pending">⏳ Planning Phase</span>
+        </div>
+
+        <!-- Camera Effects -->
+        <div class="feature-card">
+          <div class="feature-icon">📷</div>
+          <div class="feature-title">Dynamic Camera</div>
+          <div class="feature-description">
+            Kamera zoom in saat intense moment, zoom out saat calm.
+          </div>
+          <div class="feature-details">
+            • Zoom range: 0.8x - 1.2x<br>
+            • Smooth transition: Yes<br>
+            • Follow player: Always<br>
+            • Trigger: Enemy density
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Game Modes & Features -->
+    <div class="section">
+      <h2 class="section-title">🎮 Game Modes & Fitur Baru</h2>
+      
+      <div class="features-container">
+        <!-- Survival Mode -->
+        <div class="feature-card">
+          <div class="feature-icon">🏚️</div>
+          <div class="feature-title">Survival Mode</div>
+          <div class="feature-description">
+            Mode yang tidak ada batas waktu, semakin lama semakin sulit.
+          </div>
+          <div class="feature-details">
+            • Wave progression: Infinite<br>
+            • Difficulty scaling: +5% per wave<br>
+            • Leaderboard: Top 10 scores<br>
+            • Rewards: Special badges
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Arcade Mode -->
+        <div class="feature-card">
+          <div class="feature-icon">👾</div>
+          <div class="feature-title">Arcade Mode</div>
+          <div class="feature-description">
+            Mode timed dengan batas waktu dan bonus kill score.
+          </div>
+          <div class="feature-details">
+            • Time limit: 3-5 menit<br>
+            • Bonus per kill: +100 points<br>
+            • Multiplier: Time remaining x score<br>
+            • Quick & intense gameplay
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Boss Rush Mode -->
+        <div class="feature-card">
+          <div class="feature-icon">👑</div>
+          <div class="feature-title">Boss Rush Mode</div>
+          <div class="feature-description">
+            Melawan sekumpulan boss berturut-turut tanpa break.
+          </div>
+          <div class="feature-details">
+            • Boss count: 5-10<br>
+            • Difficulty: Progressive<br>
+            • Healing: Limited (1-2x)<br>
+            • Reward: Massive score
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Achievements & Badges -->
+        <div class="feature-card">
+          <div class="feature-icon">🏆</div>
+          <div class="feature-title">Achievements System</div>
+          <div class="feature-description">
+            Target achievement untuk unlock rewards dan badges spesial.
+          </div>
+          <div class="feature-details">
+            • Total achievements: 25+<br>
+            • Examples: First kill, 100 kills<br>
+            • Rewards: Cosmetics, coins<br>
+            • Display: Achievement UI
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Global Leaderboard</div>
+          <div class="feature-description">
+            Kompetisi score dengan leaderboard lokal dan online tracking.
+          </div>
+          <div class="feature-details">
+            • Local storage: Top 100<br>
+            • Cloud sync: Optional API<br>
+            • Categories: Score, kills, time<br>
+            • Social features: Share score
+          </div>
+          <span class="status-badge status-pending">⏳ Planning Phase</span>
+        </div>
+
+        <!-- Difficulty Settings -->
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <div class="feature-title">Difficulty Levels</div>
+          <div class="feature-description">
+            Easy, Normal, Hard, Insane modes dengan parameter berbeda.
+          </div>
+          <div class="feature-details">
+            • Easy: 1.5x HP, 0.7x enemy speed<br>
+            • Hard: 0.5x HP, 1.5x enemy speed<br>
+            • Insane: 0.2x HP, 2x damage<br>
+            • Score multiplier: Per difficulty
+          </div>
+          <span class="status-badge status-ready">✅ Ready to Add</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Implementation Status -->
+    <div class="section">
+      <h2 class="section-title">📈 Implementation Roadmap</h2>
+      
+      <div class="features-container">
+        <div class="feature-card" style="grid-column: 1 / -1;">
+          <div class="feature-title">✅ Phase 1: Weapons & Effects (Ready Now)</div>
+          <div class="feature-description">
+            Scatter Gun, Laser Beam, Grenade Launcher, Screen Shake, Combo System dapat langsung ditambahkan tanpa modifikasi core game.
+          </div>
+          <div class="code-block">
+// Estimasi waktu implementasi: 2-3 jam
+// Complexity: Low to Medium
+// Impact: High visual dan gameplay enhancement
+// Dependencies: Minimal, hanya perlu tambah di POWERUPS config
+          </div>
+        </div>
+
+        <div class="feature-card" style="grid-column: 1 / -1;">
+          <div class="feature-title">⏳ Phase 2: New Enemy Types (Medium Effort)</div>
+          <div class="feature-description">
+            Flying Enemy, Shield Enemy, Armored Enemy memerlukan extension dari class Minion & BossMinion.
+          </div>
+          <div class="code-block">
+// Estimasi waktu: 3-4 jam
+// Complexity: Medium
+// Memerlukan: New enemy classes, AI logic
+// Backward compatible: Ya, bisa coexist dengan minion biasa
+          </div>
+        </div>
+
+        <div class="feature-card" style="grid-column: 1 / -1;">
+          <div class="feature-title">🔜 Phase 3: Game Modes & Systems (Advanced)</div>
+          <div class="feature-description">
+            Survival Mode, Arcade Mode, Achievement System memerlukan refactor game state management.
+          </div>
+          <div class="code-block">
+// Estimasi waktu: 4-6 jam
+// Complexity: High
+// Perubahan: Game mode selector, state management
+// Recommendation: Modular architecture needed
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <button class="btn-config" onclick="showGuide('weapons')">📚 Weapons Guide</button>
+      <button class="btn-config" onclick="showGuide('enemies')">👾 Enemies Guide</button>
+      <button class="btn-enable" onclick="enableAllFeatures()">✅ Enable All Features</button>
+      <button class="btn-config" onclick="downloadTemplate()">📥 Download Template</button>
+    </div>
+
+    <!-- Message -->
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    function showGuide(type) {
+      alert(`📖 Guide untuk ${type}:\n\nLihat documentation atau file template untuk implementasi detail.`);
+    }
+
+    function enableAllFeatures() {
+      alert(`✅ Features yang bisa langsung ditambahkan:\n\n🔫 Weapons:\n- Scatter Gun\n- Laser Beam\n- Grenade Launcher\n- Homing Missile\n- Flame Thrower\n- Shotgun\n\n✨ Effects:\n- Screen Shake\n- Combo System\n- Gore/Gibs\n- Bullet Time\n\n👾 Enemies:\n- Flying Enemy\n- Shield Enemy\n- Fast Enemy\n\nMulai implementasi dari Phase 1 untuk hasil maksimal!`);
+    }
+
+    function downloadTemplate() {
+      alert('📥 Template files:\n\n1. weapon-extensions.js - Weapon classes\n2. enemy-extensions.js - Enemy classes\n3. effects-system.js - Visual effects\n\nFile-file ini bisa ditambahkan langsung tanpa mengubah game.js yang sudah ada!');
+    }
+
+    function showMessage(text) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.classList.add('success');
+      setTimeout(() => {
+        msg.classList.remove('success');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

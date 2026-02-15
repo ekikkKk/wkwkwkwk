@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Admin Panel - Character Stats</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f1724 0%, #07102a 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #aabbcc;
+      font-size: 14px;
+    }
+
+    .admin-panel {
+      background: linear-gradient(135deg, rgba(20, 40, 80, 0.9) 0%, rgba(10, 20, 50, 0.9) 100%);
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(0, 255, 255, 0.05);
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0, 255, 255, 0.3);
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #aabbcc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .stat-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #00ffff;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .stat-input:focus {
+      outline: none;
+      background: rgba(0, 255, 255, 0.1);
+      border-color: #00ff88;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    .stat-value {
+      color: #ffff00;
+      font-weight: bold;
+      font-size: 14px;
+      text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border: 2px solid;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: #fff;
+      border-color: #00ff88;
+    }
+
+    .btn-save:hover {
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #FF9800 0%, #e68900 100%);
+      color: #fff;
+      border-color: #ffaa00;
+    }
+
+    .btn-reset:hover {
+      box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6);
+    }
+
+    .btn-default {
+      background: linear-gradient(135deg, #2196F3 0%, #0b7dda 100%);
+      color: #fff;
+      border-color: #00ffff;
+    }
+
+    .btn-default:hover {
+      box-shadow: 0 6px 20px rgba(33, 150, 243, 0.6);
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+      color: #fff;
+      border-color: #ff6666;
+    }
+
+    .btn-delete:hover {
+      box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+
+    .message.success {
+      background: rgba(76, 175, 80, 0.2);
+      border: 2px solid #4CAF50;
+      color: #00ff88;
+      display: block;
+    }
+
+    .message.error {
+      background: rgba(244, 67, 54, 0.2);
+      border: 2px solid #f44336;
+      color: #ff6666;
+      display: block;
+    }
+
+    .info-box {
+      background: rgba(33, 150, 243, 0.1);
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin-bottom: 30px;
+      border-radius: 5px;
+    }
+
+    .info-box h3 {
+      color: #00ffff;
+      margin-bottom: 10px;
+    }
+
+    .info-box ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .info-box li {
+      color: #aabbcc;
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .info-box li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #00ff88;
+      font-weight: bold;
+    }
+
+    .preset-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .preset-btn {
+      padding: 10px 15px;
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid #00ffff;
+      color: #00ffff;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .preset-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .admin-panel {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>⚙️ ADMIN PANEL</h1>
+      <p>Minion Chase - Character Stats Configuration</p>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel">
+      <!-- Info Box -->
+      <div class="info-box">
+        <h3>📋 Petunjuk Penggunaan:</h3>
+        <ul>
+          <li>Ubah nilai stats sesuai keinginan Anda</li>
+          <li>Klik "💾 SAVE STATS" untuk menyimpan perubahan</li>
+          <li>Buka game.html untuk melihat perubahan</li>
+          <li>Gunakan preset untuk setup cepat</li>
+        </ul>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <!-- HP -->
+        <div class="stat-card">
+          <label class="stat-label">
+            <span class="stat-icon">❤️</span>
+            HP (Health Points)
+          </label>
+          <input type="number" id="hp" class="stat-input" min="1" max="999" value="20">
+          <small class="stat-value" id="hp-display">Default: 20</small>
+        </div>
+
+        <!-- Damage -->
+        <div class="stat-card">
+          <label class="stat-label">
+            <span class="stat-icon">💥</span>
+            Damage (Basic)
+          </label>
+          <input type="number" id="damage" class="stat-input" min="0.1" max="100" step="0.1" value="1.0">
+          <small class="stat-value" id="damage-display">Default: 1.0</small>
+        </div>
+
+        <!-- Critical Damage -->
+        <div class="stat-card">
+          <label class="stat-label">
+            <span class="stat-icon">⚡</span>
+            Critical Damage Multiplier
+          </label>
+          <input type="number" id="criticalDamage" class="stat-input" min="1" max="10" step="0.1" value="1.5">
+          <small class="stat-value" id="criticalDamage-display">Default: 1.5x</small>
+        </div>
+
+        <!-- Critical Rate -->
+        <div class="stat-card">
+          <label class="stat-label">
+            <span class="stat-icon">🎯</span>
+            Critical Rate (Probability)
+          </label>
+          <input type="number" id="criticalRate" class="stat-input" min="0" max="1" step="0.05" value="0.1">
+          <small class="stat-value" id="criticalRate-display">Default: 10%</small>
+        </div>
+
+        <!-- Fire Rate -->
+        <div class="stat-card">
+          <label class="stat-label">
+            <span class="stat-icon">🔥</span>
+            Fire Rate (Seconds per Shot)
+          </label>
+          <input type="number" id="fireRate" class="stat-input" min="0.05" max="2" step="0.05" value="0.25">
+          <small class="stat-value" id="fireRate-display">Default: 0.25s</small>
+        </div>
+
+        <!-- Movement Speed -->
+        <div class="stat-card">
+          <label class="stat-label">
+            <span class="stat-icon">🏃</span>
+            Movement Speed
+          </label>
+          <input type="number" id="movement" class="stat-input" min="100" max="1000" step="50" value="400">
+          <small class="stat-value" id="movement-display">Default: 400</small>
+        </div>
+
+        <!-- Jump Speed -->
+        <div class="stat-card">
+          <label class="stat-label">
+            <span class="stat-icon">⬆️</span>
+            Jump Speed (Power)
+          </label>
+          <input type="number" id="jumpSpeed" class="stat-input" min="500" max="2000" step="50" value="950">
+          <small class="stat-value" id="jumpSpeed-display">Default: 950</small>
+        </div>
+      </div>
+
+      <!-- Preset Buttons -->
+      <div>
+        <label class="stat-label">🎮 Preset Configurations:</label>
+        <div class="preset-buttons">
+          <button class="preset-btn" onclick="loadPreset('easy')">🟢 Easy (HP: 50)</button>
+          <button class="preset-btn" onclick="loadPreset('normal')">🟡 Normal (HP: 20)</button>
+          <button class="preset-btn" onclick="loadPreset('hard')">🔴 Hard (HP: 10)</button>
+          <button class="preset-btn" onclick="loadPreset('insane')">⚫ Insane (HP: 5)</button>
+          <button class="preset-btn" onclick="loadPreset('god')">👑 God Mode (HP: 999)</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button class="btn-save" onclick="saveStats()">💾 SAVE STATS</button>
+        <button class="btn-default" onclick="loadDefaults()">↩️ LOAD DEFAULTS</button>
+        <button class="btn-reset" onclick="resetToDefault()">🔄 RESET ALL</button>
+        <button class="btn-delete" onclick="deleteAllData()">🗑️ DELETE ALL DATA</button>
+      </div>
+
+      <!-- Message -->
+      <div id="message" class="message"></div>
+    </div>
+  </div>
+
+  <script>
+    // Default Stats
+    const DEFAULT_STATS = {
+      hp: 20,
+      damage: 1.0,
+      criticalDamage: 1.5,
+      criticalRate: 0.1,
+      fireRate: 0.25,
+      movement: 400,
+      jumpSpeed: 950
+    };
+
+    // Preset Configurations
+    const PRESETS = {
+      easy: {
+        hp: 50,
+        damage: 2.0,
+        criticalDamage: 2.0,
+        criticalRate: 0.2,
+        fireRate: 0.15,
+        movement: 500,
+        jumpSpeed: 1050
+      },
+      normal: {
+        hp: 20,
+        damage: 1.0,
+        criticalDamage: 1.5,
+        criticalRate: 0.1,
+        fireRate: 0.25,
+        movement: 400,
+        jumpSpeed: 950
+      },
+      hard: {
+        hp: 10,
+        damage: 0.8,
+        criticalDamage: 1.2,
+        criticalRate: 0.05,
+        fireRate: 0.35,
+        movement: 350,
+        jumpSpeed: 900
+      },
+      insane: {
+        hp: 5,
+        damage: 0.5,
+        criticalDamage: 1.0,
+        criticalRate: 0,
+        fireRate: 0.5,
+        movement: 300,
+        jumpSpeed: 850
+      },
+      god: {
+        hp: 999,
+        damage: 10.0,
+        criticalDamage: 5.0,
+        criticalRate: 0.5,
+        fireRate: 0.05,
+        movement: 800,
+        jumpSpeed: 1200
+      }
+    };
+
+    // Load stats on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStats();
+      updateDisplay();
+    });
+
+    // Load stats from localStorage
+    function loadStats() {
+      const saved = localStorage.getItem('minion_chase_stats_v1');
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          Object.keys(data).forEach(key => {
+            const input = document.getElementById(key);
+            if (input) input.value = data[key];
+          });
+        } catch (e) {
+          loadDefaults();
+        }
+      } else {
+        loadDefaults();
+      }
+    }
+
+    // Load default stats
+    function loadDefaults() {
+      Object.keys(DEFAULT_STATS).forEach(key => {
+        document.getElementById(key).value = DEFAULT_STATS[key];
+      });
+      updateDisplay();
+    }
+
+    // Load preset configuration
+    function loadPreset(preset) {
+      if (PRESETS[preset]) {
+        Object.keys(PRESETS[preset]).forEach(key => {
+          document.getElementById(key).value = PRESETS[preset][key];
+        });
+        updateDisplay();
+        showMessage(`✅ Preset "${preset.toUpperCase()}" dimuat!`, 'success');
+      }
+    }
+
+    // Update display values
+    function updateDisplay() {
+      document.getElementById('hp-display').textContent = `HP: ${document.getElementById('hp').value}`;
+      document.getElementById('damage-display').textContent = `Damage: ${document.getElementById('damage').value}`;
+      document.getElementById('criticalDamage-display').textContent = `Multiplier: ${document.getElementById('criticalDamage').value}x`;
+      document.getElementById('criticalRate-display').textContent = `Rate: ${(document.getElementById('criticalRate').value * 100).toFixed(0)}%`;
+      document.getElementById('fireRate-display').textContent = `Rate: ${document.getElementById('fireRate').value}s`;
+      document.getElementById('movement-display').textContent = `Speed: ${document.getElementById('movement').value}`;
+      document.getElementById('jumpSpeed-display').textContent = `Power: ${document.getElementById('jumpSpeed').value}`;
+    }
+
+    // Save stats
+    function saveStats() {
+      const stats = {
+        hp: parseFloat(document.getElementById('hp').value),
+        damage: parseFloat(document.getElementById('damage').value),
+        criticalDamage: parseFloat(document.getElementById('criticalDamage').value),
+        criticalRate: parseFloat(document.getElementById('criticalRate').value),
+        fireRate: parseFloat(document.getElementById('fireRate').value),
+        movement: parseFloat(document.getElementById('movement').value),
+        jumpSpeed: parseFloat(document.getElementById('jumpSpeed').value)
+      };
+
+      // Validate
+      if (stats.hp < 1 || stats.damage < 0.1 || stats.fireRate < 0.05) {
+        showMessage('❌ Nilai tidak valid! Periksa kembali.', 'error');
+        return;
+      }
+
+      localStorage.setItem('minion_chase_stats_v1', JSON.stringify(stats));
+      showMessage('✅ Stats berhasil disimpan! Buka game.html untuk melihat perubahan.', 'success');
+      updateDisplay();
+    }
+
+    // Reset to default
+    function resetToDefault() {
+      if (confirm('⚠️ Ini akan RESET stats ke default!\n\nLanjutkan?')) {
+        loadDefaults();
+        saveStats();
+        showMessage('✅ Stats berhasil di-RESET ke default!', 'success');
+      }
+    }
+
+    // Delete all data
+    function deleteAllData() {
+      if (confirm('⚠️ PERINGATAN: Ini akan HAPUS SEMUA DATA!\n\n- Stats\n- High Score\n- Coins\n\nTidak bisa dikembalikan! Lanjutkan?')) {
+        localStorage.removeItem('minion_chase_high_v1');
+        localStorage.removeItem('minion_chase_stats_v1');
+        localStorage.removeItem('minion_chase_coins_v1');
+        loadDefaults();
+        showMessage('✅ Semua data berhasil dihapus!', 'success');
+      }
+    }
+
+    // Show message
+    function showMessage(text, type) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.className = `message ${type}`;
+      setTimeout(() => {
+        msg.className = 'message';
+      }, 4000);
+    }
+
+    // Update display on input change
+    document.querySelectorAll('.stat-input').forEach(input => {
+      input.addEventListener('input', updateDisplay);
+    });
+  </script>
+</body>
+</html>
